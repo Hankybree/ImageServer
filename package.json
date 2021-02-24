@@ -1,31 +1,21 @@
 {
   "name": "three-software-renderer",
-  "version": "1.2.0",
+  "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "example": "node example/render-to-png.js"
+  "directories": {
+    "example": "example"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/avgp/three-software-renderer.git"
-  },
-  "keywords": [],
-  "author": "Martin Naumann",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/avgp/three-software-renderer/issues"
-  },
-  "homepage": "https://github.com/avgp/three-software-renderer#readme",
-  "devDependencies": {
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
     "pngjs": "^3.4.0",
     "three": "^0.112.1"
   },
-  "peerDependencies": {
-    "three": "^0.112.1"
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies": {},
-  "engines": {
-    "node": ">=10.0.0"
-  }
+  "author": "",
+  "license": "ISC"
 }
