@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const THREE = require('three')
-const PNG = require('pngjs')
+const PNG = require('pngjs').PNG
 const fs = require('fs')
 const SoftwareRenderer = require("../").SoftwareRenderer;
 
