@@ -15,7 +15,8 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node example/render-to-png.js"
+    "start": "node example/render-to-png.js",
+    "deploy": "docker build -t hankybree/imageserver:latest . && docker push hankybree/imageserver:latest"
   },
   "author": "",
   "license": "ISC"

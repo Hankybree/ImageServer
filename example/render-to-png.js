@@ -11,8 +11,17 @@ const port = 3000
 app.use(express.json())
 app.use(cors())
 
+var data = new Buffer.from('RFJBQ08CAgEBAAAAGAwBDAAABd/3fd8H/wJmQP8CZkAC/wAAAAAAAQAJAwAAAgEBCQMAAQMBAQEADwNVFVUFH1kVBwEQCBMMfCEIyWyFAAAA4FtGOgAAkDQAAAAAIADoLSUNAMC3jDQAAIBICwAAAEAA4FsikLQAABBpAAC+paQBAABIOgAAAAAEAN9SQKQDAAAEAAAAAP8/AAAAAAAAAAAAAAAAAAAAAJxCDgADAQALAwEwGwEIAQgGAArzcW2AAP4D//8D/wEAAAIA+P8fAACAAP8DAAD/AQAACg==', 'base64')
+
+console.log(data.toString())
+let loader = new THREE.BufferGeometryLoader()
+let geometry1 = loader.parse(data)
 app.listen(port, () => {
   console.log('Listening on port: ' + port)
+})
+
+app.get('/test', (req, res) => {
+  res.send({ msg: 'Success!' })
 })
 
 app.get('/', (req, res) => {
@@ -26,7 +35,7 @@ app.get('/', (req, res) => {
   const scene = new THREE.Scene();
   const geometry = new THREE.BoxGeometry(200, 200, 200);
   const material = new THREE.MeshBasicMaterial({color: 0xff0000});
-  const mesh = new THREE.Mesh(geometry, material);
+  const mesh = new THREE.Mesh(geometry1, material);
   scene.add(mesh);
   
   // Rotate the cube a bit
@@ -52,6 +61,7 @@ app.get('/', (req, res) => {
   if (!fs.existsSync("temp")) {
     fs.mkdirSync("temp");
   }
+  let imgUrl = png.setEncoding('base64')
   png.pack().pipe(fs.createWriteStream("temp/example.png"));
-  res.send({ msg: 'Success!', data: imagedata })
+  res.send({ msg: 'Success!', data: imgUrl })
 })
