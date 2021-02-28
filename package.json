@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "directories": {
-    "example": "example"
-  },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
@@ -18,7 +15,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon example/render-to-png.js",
+    "start": "nodemon index.js",
     "deploy": "docker build -t hankybree/imageserver:latest . && docker push hankybree/imageserver:latest"
   },
   "author": "",
