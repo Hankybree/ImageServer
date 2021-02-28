@@ -10,12 +10,15 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "pngjs": "^3.4.0",
+    "rhino3dm": "0.13.0",
     "three": "^0.112.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node example/render-to-png.js",
+    "start": "nodemon example/render-to-png.js",
     "deploy": "docker build -t hankybree/imageserver:latest . && docker push hankybree/imageserver:latest"
   },
   "author": "",
