@@ -8,7 +8,7 @@ const fs = require('fs')
 const rhino3dm = require('rhino3dm')
 
 const app = express()
-const port = 3000
+const port = 3001
 
 app.use(express.json())
 app.use(cors())
@@ -19,14 +19,7 @@ app.listen(port, () => {
 
 loadRhino3dm()
 
-var data = 'RFJBQ08CAgEBAAAAGAwBDAAABd/3fd8H/wJmQP8CZkAC/wAAAAAAAQAJAwAAAgEBCQMAAQMBAQEADwNVFVUFH1kVBwEQCBMMfCEIyWyFAAAA4FtGOgAAkDQAAAAAIADoLSUNAMC3jDQAAIBICwAAAEAA4FsikLQAABBpAAC+paQBAABIOgAAAAAEAN9SQKQDAAAEAAAAAP8/AAAAAAAAAAAAAAAAAAAAAJxCDgADAQALAwEwGwEIAQgGAArzcW2AAP4D//8D/wEAAAIA+P8fAACAAP8DAAD/AQAACg=='
-
-
-app.get('/test', (req, res) => {
-  res.send({ msg: 'Success!' })
-})
-
-app.get('/', (req, res) => {
+app.post('/', (req, res) => {
   console.log('API call recieved!')
 
   // Build scene with cube
@@ -40,13 +33,14 @@ app.get('/', (req, res) => {
   //const material = new THREE.MeshBasicMaterial({color: 0xff0000});
   //const mesh = new THREE.Mesh(geometry, material);
   
-  const mesh = meshToThreejs(data)
+  const mesh = meshToThreejs(req.body.meshString)
 
   scene.add(mesh);
   
   // Rotate the cube a bit
-  mesh.rotation.x += 0.5;
-  mesh.rotation.y += 0.6;
+  //mesh.rotation.x += 0.5;
+  //mesh.rotation.y += 0.6;
+  mesh.position.z += 400
   
   // Render into pixels-array (RGBA)
   const renderer = new SoftwareRenderer();
@@ -64,25 +58,27 @@ app.get('/', (req, res) => {
     png.data[i] = imagedata.data[i];
   }
 
-  // if (!fs.existsSync("temp")) {
-  //   fs.mkdirSync("temp");
-  // }
+  if (!fs.existsSync("temp")) {
+    fs.mkdirSync("temp");
+  }
 
-  png.pack();
-  var chunks = [];
-  var imgUrl
-  png.on('data', function(chunk) {
-    chunks.push(chunk);
-    console.log('chunk:', chunk.length);
-  });
-  png.on('end', function() {
-    var result = Buffer.concat(chunks);
-    console.log('final result:', result.length);
-    imgUrl = 'data:image/png;base64,' + result.toString('base64')
-    res.send({ msg: 'Success!', imgUrl })
-  });
+  // png.pack();
+  // var chunks = [];
+  // var imgUrl
+  // png.on('data', function(chunk) {
+  //   chunks.push(chunk);
+  //   console.log('chunk:', chunk.length);
+  // });
+  // png.on('end', function() {
+  //   var result = Buffer.concat(chunks);
+  //   console.log('final result:', result.length);
+  //   imgUrl = 'data:image/png;base64,' + result.toString('base64')
+  //   res.send({ msg: 'Success!', imgUrl })
+  // });
 
-  //png.pack().pipe(fs.createWriteStream("temp/example.png"));
+  png.pack().pipe(fs.createWriteStream("temp/example3.png"));
+
+  res.send({ msg: 'Success!' })
   
 })
 
