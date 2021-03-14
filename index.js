@@ -100,22 +100,17 @@ function meshToThreejs(base64, colors) {
 
   const colorsAttr = geometry.attributes.position.clone();
   colorsAttr.array = colors
-  console.log(colorsAttr)
   
   geometry.setAttribute('color', colorsAttr);
 
-  console.log(geometry)
-
-  const material = new THREE.MeshBasicMaterial({
+  const material = new THREE.MeshPhongMaterial({
     vertexColors: THREE.VertexColors
-  });
+  })
 
-  console.log(material)
   return new THREE.Mesh(geometry, material)
 }
 
 function setupCamera(width, height) {
-  console.log('Camera')
   const fov = 75
   const aspect = width / height
   const near = 0.1
