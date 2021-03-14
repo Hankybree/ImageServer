@@ -22,25 +22,22 @@ loadRhino3dm()
 app.post('/', (req, res) => {
   console.log('API call recieved!')
 
-  // Build scene with cube
   const width = 1024;
   const height = 768;
-  const camera = new THREE.PerspectiveCamera(75, width / height, 1, 10000);
-  camera.position.z = 500;
-  const scene = new THREE.Scene();
 
-  //const geometry = new THREE.BoxGeometry(200, 200, 200);
-  //const material = new THREE.MeshBasicMaterial({color: 0xff0000});
-  //const mesh = new THREE.Mesh(geometry, material);
+  const scene = new THREE.Scene()
   
-  const mesh = meshToThreejs(req.body.meshString)
+  const camera = setupCamera(width, height)
+  
+  // TEMP GONNA COME FROM CLIENT
+  const colors = getColorArray()
+  // END TEMP
+  const mesh = meshToThreejs(req.body.meshString, colors)
 
   scene.add(mesh);
-  
-  // Rotate the cube a bit
-  //mesh.rotation.x += 0.5;
-  //mesh.rotation.y += 0.6;
-  mesh.position.z += 400
+
+  setRotation(mesh)
+  setPosition(mesh)
   
   // Render into pixels-array (RGBA)
   const renderer = new SoftwareRenderer();
@@ -96,11 +93,126 @@ function loadRhino3dm() {
   })
 }
 
-function meshToThreejs (base64) {
+function meshToThreejs(base64, colors) {
   const mesh = rhino.DracoCompression.decompressBase64String(base64)
   let loader = new THREE.BufferGeometryLoader()
   var geometry = loader.parse(mesh.toThreejsJSON())
-  //console.log(geometry)
-  const material = new THREE.MeshBasicMaterial({color: 0xff0000});
+
+  const colorsAttr = geometry.attributes.position.clone();
+  colorsAttr.array = colors
+  console.log(colorsAttr)
+  
+  geometry.setAttribute('color', colorsAttr);
+
+  console.log(geometry)
+
+  const material = new THREE.MeshBasicMaterial({
+    vertexColors: THREE.VertexColors
+  });
+
+  console.log(material)
   return new THREE.Mesh(geometry, material)
+}
+
+function setupCamera(width, height) {
+  console.log('Camera')
+  const fov = 75
+  const aspect = width / height
+  const near = 0.1
+  const far = 1000
+
+  return new THREE.PerspectiveCamera(fov, aspect, near, far)
+}
+
+function setRotation(mesh) {
+
+  mesh.rotation.x = -1
+  mesh.rotation.y = 0
+  mesh.rotation.z = 0.5;
+}
+
+function setPosition(mesh) {
+  mesh.position.z -= 50
+  mesh.position.y -= 10
+}
+
+function getColorArray () {
+  var color_object = {
+    "0": 0.5098039507865906,
+    "1": 0.33725491166114807,
+    "2": 0.3960784375667572,
+    "3": 0.20392157137393951,
+    "4": 0.8392156958580017,
+    "5": 0.0941176488995552,
+    "6": 0.5098039507865906,
+    "7": 0.33725491166114807,
+    "8": 0.3960784375667572,
+    "9": 0.20392157137393951,
+    "10": 0.8392156958580017,
+    "11": 0.0941176488995552,
+    "12": 0.5098039507865906,
+    "13": 0.33725491166114807,
+    "14": 0.3960784375667572,
+    "15": 0.20392157137393951,
+    "16": 0.8392156958580017,
+    "17": 0.0941176488995552,
+    "18": 0.5098039507865906,
+    "19": 0.33725491166114807,
+    "20": 0.3960784375667572,
+    "21": 0.20392157137393951,
+    "22": 0.8392156958580017,
+    "23": 0.0941176488995552,
+    "24": 0.5098039507865906,
+    "25": 0.33725491166114807,
+    "26": 0.3960784375667572,
+    "27": 0.20392157137393951,
+    "28": 0.8392156958580017,
+    "29": 0.0941176488995552,
+    "30": 0.5098039507865906,
+    "31": 0.33725491166114807,
+    "32": 0.3960784375667572,
+    "33": 0.20392157137393951,
+    "34": 0.8392156958580017,
+    "35": 0.0941176488995552,
+    "36": 0.5098039507865906,
+    "37": 0.33725491166114807,
+    "38": 0.3960784375667572,
+    "39": 0.20392157137393951,
+    "40": 0.8392156958580017,
+    "41": 0.0941176488995552,
+    "42": 0.5098039507865906,
+    "43": 0.33725491166114807,
+    "44": 0.3960784375667572,
+    "45": 0.20392157137393951,
+    "46": 0.8392156958580017,
+    "47": 0.0941176488995552,
+    "48": 0.5098039507865906,
+    "49": 0.33725491166114807,
+    "50": 0.3960784375667572,
+    "51": 0.20392157137393951,
+    "52": 0.8392156958580017,
+    "53": 0.0941176488995552,
+    "54": 0.5098039507865906,
+    "55": 0.33725491166114807,
+    "56": 0.3960784375667572,
+    "57": 0.20392157137393951,
+    "58": 0.8392156958580017,
+    "59": 0.0941176488995552,
+    "60": 0.5098039507865906,
+    "61": 0.33725491166114807,
+    "62": 0.3960784375667572,
+    "63": 0.20392157137393951,
+    "64": 0.8392156958580017,
+    "65": 0.0941176488995552,
+    "66": 0.5098039507865906,
+    "67": 0.33725491166114807,
+    "68": 0.3960784375667572,
+    "69": 0.20392157137393951,
+    "70": 0.8392156958580017,
+    "71": 0.0941176488995552
+  }
+  
+  var color_array = Object.values(color_object)
+  
+  return new Float32Array(color_array)
 }
